@@ -1,0 +1,18 @@
+.StripeElement {
+  border-radius: 4px;
+  padding: 16px;
+  border: solid 1px #ddd;
+  background-color: #eee;
+  &--invalid {
+    background-color: var(--light-red);
+    border-color: var(--red);
+  }
+}
+
+#card-expiry-element {
+  width: 90px;
+}
+
+#card-cvc-element {
+  width: 90px;
+}

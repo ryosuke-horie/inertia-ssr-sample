@@ -1,0 +1,24 @@
+@import './variables';
+@import './stripe';
+
+html {
+  // ModalComponent表示中スクロール拒否
+  &[data-is-modal='active'] {
+    overflow: hidden;
+  }
+  // BaseLayoutComponentサイドバー表示中スクロール拒否(横幅1024px未満)
+  &[data-is-sidebar='active'] {
+    @media screen and (max-width: 1024px) {
+      overflow: hidden;
+    }
+  }
+}
+
+ul,
+li {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+}

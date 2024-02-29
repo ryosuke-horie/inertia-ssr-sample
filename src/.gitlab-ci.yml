@@ -1,0 +1,70 @@
+# ステージを定義
+stages:
+  - install
+  - build
+  - static_analysis
+
+variables:
+  # git clean時にvendor/とnode_modules/を除外する（Job間で使いまわすため）
+  GIT_CLEAN_FLAGS: -ffdx -e vendor/ -e node_modules/
+  # dockerのoverlay2ドライバを使用する(高速化)
+  DOCKER_DRIVER: overlay2
+
+install_npm:
+  stage: install
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+  script:
+    - npm i
+
+install_composer:
+  stage: install
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+  script:
+    - composer install --no-progress
+
+# build可能な状態かチェック
+build:
+  stage: build
+  needs: ['install_npm']
+  script:
+    - npm run build
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+
+# phpmdによる静的解析
+phpmd:
+  stage: static_analysis
+  needs: ['install_composer']
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+  script:
+    - composer run phpmd
+
+# phpstanによる静的解析
+phpstan:
+  stage: static_analysis
+  needs: ['install_composer']
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+  script:
+    - composer run phpstan
+
+# phpcsによる静的解析
+phpcs:
+  stage: static_analysis
+  needs: ['install_composer']
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+  script:
+    - composer run phpcs
+
+# ESLint,Prettierによる静的解析
+eslint:
+  stage: static_analysis
+  needs: ['install_npm']
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+  script:
+    - npm run lint

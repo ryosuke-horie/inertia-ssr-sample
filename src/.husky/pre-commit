@@ -1,0 +1,3 @@
+docker compose exec -T app composer run phpstan
+docker compose exec -T app composer run phpcs
+docker compose exec -T app composer run phpmd

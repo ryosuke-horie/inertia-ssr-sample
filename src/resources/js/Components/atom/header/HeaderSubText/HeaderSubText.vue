@@ -1,0 +1,38 @@
+<script setup lang="ts">
+import type { HeaderSubTextProps } from './type';
+import { Link } from '@inertiajs/vue3';
+const props = defineProps<HeaderSubTextProps>();
+</script>
+
+<template>
+  <div class="c-header-sub-text">
+    <p class="c-header-sub-text__text">{{ props.text }}</p>
+    <Link class="c-header-sub-text__link" v-if="props.href" :href="props.href">
+      <i class="fa-solid fa-chevron-left"></i>
+    </Link>
+  </div>
+</template>
+
+<style lang="scss">
+.c-header-sub-text {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 50px;
+  padding: 8px 0;
+  &__text {
+    white-space: pre-wrap;
+    font-size: 18px;
+    font-weight: var(--bold);
+  }
+  &__link {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 20px;
+    color: inherit;
+  }
+}
+</style>

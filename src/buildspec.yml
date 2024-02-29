@@ -1,0 +1,19 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - composer install
+      - npm ci
+  build:
+    commands:
+      - php artisan ziggy:generate --types
+      - npm run build
+  post_build:
+    commands:
+      - rm -rf node_modules
+      - rm -rf vendor
+
+artifacts:
+  files:
+    - '**/*'

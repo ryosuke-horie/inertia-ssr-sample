@@ -1,0 +1,10 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /opt/cheerpay/laravel/current
+hooks:
+  BeforeInstall:
+    - location: bin/before_install.sh
+  AfterInstall:
+    - location: bin/after_install.sh

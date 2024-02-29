@@ -1,0 +1,1647 @@
+openapi: '3.0.0'
+info:
+  version: 1.0.0
+  title: Swagger CheerPay
+  license:
+    name: MIT
+servers:
+  - url: https://cheerpay.com/v1
+tags:
+  - name: SSR
+    description: InertiaJsスキーマ
+  - name: ALL
+    description: 全ロール用API
+  - name: CORPORATION
+    description: 法人用API
+  - name: BUSINESS_OPERATOR
+    description: 事業者用API
+  - name: STAFF
+    description: スタッフ用API
+  - name: GUEST
+    description: 投げ銭ユーザー用API
+paths:
+  ##################### InertiaJS #####################
+  /staff/mypage:
+    get:
+      tags:
+        - SSR
+      summary: Inertiaスタッフマイページ
+      operationId: ssrStaffMypage
+      responses:
+        '200':
+          $ref: '#/components/responses/200_RESPONSE_INERTIA_STAFF_MYPAGE'
+  /staff/profile:
+    get:
+      tags:
+        - SSR
+      summary: Inertiaスタッフプロフィール取得
+      operationId: ssrStaffProfile
+      responses:
+        '200':
+          $ref: '#/components/responses/200_RESPONSE_INERTIA_STAFF_PROFILE'
+    post:
+      tags:
+        - SSR
+      summary: Inertiaスタッフプロフィール更新
+      operationId: ssrStaffProfileUpdate
+      requestBody:
+        $ref: '#/components/requestBodies/REQUEST_INERTIA_STAFF_PROFILE'
+      responses:
+        '200':
+          $ref: '#/components/responses/200_RESPONSE_INERTIA_STAFF_PROFILE'
+  /staff/profile/setting:
+    get:
+      tags:
+        - SSR
+      summary: Inertiaスタッフプロフィール取得
+      operationId: ssrStaffProfileSetting
+      responses:
+        '200':
+          $ref: '#/components/responses/200_RESPONSE_INERTIA_STAFF_PROFILE_SETTING'
+  /staff/like:
+    get:
+      tags:
+        - SSR
+      summary: Inertiaスタッフいいね履歴
+      operationId: ssrGetStaffLike
+      responses:
+        '200':
+          $ref: '#/components/responses/200_RESPONSE_INERTIA_STAFF_LIKES'
+  /staff/point-historiy:
+    get:
+      tags:
+        - SSR
+      summary: Inertiaポイント履歴
+      operationId: ssrGetStaffPointHistory
+      responses:
+        '200':
+          $ref: '#/components/responses/200_RESPONSE_INERTIA_STAFF_POINT_HISTORIES'
+  /staff/tips:
+    get:
+      tags:
+        - SSR
+      summary: Inertiaスタッフ応援履歴
+      operationId: ssrGetStaffTips
+      responses:
+        '200':
+          $ref: '#/components/responses/200_RESPONSE_INERTIA_STAFF_TIPS'
+  /staff/tips/{tipId}:
+    get:
+      tags:
+        - SSR
+      summary: Inertiaスタッフ応援履歴取得
+      operationId: ssrGetStaffTipsTipId
+      parameters:
+        - $ref: '#/components/parameters/PATH_TIP_ID'
+      responses:
+        '200':
+          $ref: '#/components/responses/200_RESPONSE_INERTIA_STAFF_TIP_SHOW'
+    post:
+      tags:
+        - SSR
+      summary: Inertiaスタッフ応援履歴返信
+      operationId: ssrPostStaffTipsTipId
+      parameters:
+        - $ref: '#/components/parameters/PATH_TIP_ID'
+      requestBody:
+        $ref: '#/components/requestBodies/REQUEST_INERTIA_CHEER_HISTORY_CREATE'
+      responses:
+        '200':
+          $ref: '#/components/responses/200_RESPONSE_INERTIA_STAFF_TIP_SHOW'
+  /staff/tips/{tipId}/{replyId}:
+    delete:
+      tags:
+        - SSR
+      summary: Inertiaスタッフ応援履歴返信削除
+      operationId: ssrDeleteStaffTipsTipIdReplyId
+      parameters:
+        - $ref: '#/components/parameters/PATH_TIP_ID'
+        - $ref: '#/components/parameters/PATH_REPLY_ID'
+      responses:
+        '200':
+          $ref: '#/components/responses/200_RESPONSE_INERTIA_STAFF_TIP_SHOW'
+  /business-operator/staff/{staffId}/setting:
+    get:
+      tags:
+        - SSR
+      summary: Inertiaスタッフプロフィール設定取得
+      operationId: ssrBusinessOperatorStaffStaffIdProfileSetting
+      parameters:
+        - $ref: '#/components/parameters/PATH_STAFF_ID'
+      responses:
+        '200':
+          $ref: '#/components/responses/200_RESPONSE_INERTIA_STAFF_PROFILE_SETTING'
+  ##################### 全ロールAPI #####################
+  /all/staff/{staffId}/prompts/{promptId}:
+    get:
+      tags:
+        - ALL
+      summary: ChatGPT API
+      operationId: getAllStaffStaffIdPromptsPromptId
+      parameters:
+        - $ref: '#/components/parameters/PATH_STAFF_ID'
+        - $ref: '#/components/parameters/PATH_PROMPT_ID'
+      responses:
+        '200':
+          $ref: '#/components/responses/200_RESPONSE_ALL_CHATGPT_FOR_USER'
+  /all/tips/{tipId}/prompts/{promptId}:
+    get:
+      tags:
+        - ALL
+      summary: ChatGPT API
+      operationId: getAllTipsTipIdPromptsPromptId
+      parameters:
+        - $ref: '#/components/parameters/PATH_TIP_ID'
+        - $ref: '#/components/parameters/PATH_PROMPT_ID'
+      responses:
+        '200':
+          $ref: '#/components/responses/200_RESPONSE_ALL_CHATGPT'
+  /all/zipcloud/{zipCode}:
+    get:
+      tags:
+        - ALL
+      summary: Zipcloudで住所情報取得
+      operationId: getAllZipcloudZipCode
+      parameters:
+        - $ref: '#/components/parameters/PATH_ZIP_CODE'
+      responses:
+        '200':
+          $ref: '#/components/responses/200_RESPONSE_ALL_ZIPCLOUD'
+  ##################### 投げ銭(ゲスト)用API #####################
+  /guest/business-operator/{businessId}/staff/{staffId}/exists:
+    get:
+      tags:
+        - GUEST
+      summary: 事業者・スタッフチェック
+      operationId: getUserGuestBusinessOperatorBusinessIdStaffStaffIdExists
+      parameters:
+        - $ref: '#/components/parameters/PATH_BUSINESS_ID'
+        - $ref: '#/components/parameters/PATH_STAFF_ID'
+      responses:
+        '200':
+          $ref: '#/components/responses/200_RESPONSE'
+  /guest/business-operator/{businessId}/staff/{staffId}/create-payment-intent:
+    post:
+      tags:
+        - GUEST
+      summary: StripeElementSecretKey取得
+      operationId: postUserGuestBusinessOperatorBusinessIdStaffStaffIdCreatePaymentIntent
+      parameters:
+        - $ref: '#/components/parameters/PATH_BUSINESS_ID'
+        - $ref: '#/components/parameters/PATH_STAFF_ID'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - amount
+                - guestNickname
+                - message
+              properties:
+                amount:
+                  type: integer
+                  example: 4000
+                  description: stripe決済金額
+                guestNickname:
+                  type: string
+                  example: ゲストユーザー
+                  description: ゲストユーザーのニックネーム
+                message:
+                  type: string
+                  example: 応援してます！
+                  description: 投げ銭するメッセージ
+      responses:
+        '200':
+          description: 正常処理
+          content:
+            application/json:
+              schema:
+                required:
+                  - clientSecret
+                properties:
+                  clientSecret:
+                    type: string
+                    description: stripe-jsで利用するsecretKey
+  ##################### 投げ銭用API #####################
+  /user/payment-info/create-payment-intent:
+    post:
+      tags:
+        - GUEST
+      summary: StripeElementSecretKey取得
+      operationId: postUserPaymentInfoCreatePaymentIntent
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - amount
+              properties:
+                amount:
+                  type: integer
+                  example: 4000
+                  description: stripe決済金額
+      responses:
+        '200':
+          description: 正常処理
+          content:
+            application/json:
+              schema:
+                required:
+                  - clientSecret
+                properties:
+                  clientSecret:
+                    type: string
+                    description: stripe-jsで利用するsecretKey
+  /user/profile/image:
+    post:
+      tags:
+        - GUEST
+      summary: プロフィール画像登録
+      operationId: postUserProfileImage
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - image
+              properties:
+                image:
+                  $ref: '#/components/schemas/modelFile'
+      responses:
+        '200':
+          description: 正常処理
+          content:
+            application/json:
+              schema:
+                required:
+                  - userProfileImage
+                properties:
+                  userProfileImage:
+                    type: string
+                    description: ユーザー画像
+                    example: 'https://aws.png'
+  /user/profile/setting/show-ranking:
+    post:
+      tags:
+        - GUEST
+      summary: ランキング表示・非表示更新API
+      operationId: postProfileSettingShowRanking
+      requestBody:
+        $ref: '#/components/requestBodies/REQUEST_USER_SETTING_IS_SHOW_RANKING'
+      responses:
+        '200':
+          $ref: '#/components/responses/200_RESPONSE'
+  /user/payment-info/register-payment-method:
+    post:
+      tags:
+        - GUEST
+      summary: stripe会員情報登録
+      operationId: postUserPaymentInfoRegisterPaymentMethod
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - token
+              properties:
+                token:
+                  type: string
+                  example: abcdefghijklmn
+                  description: stripeトークン
+      responses:
+        '200':
+          $ref: '#/components/responses/200_RESPONSE'
+  ##################### 事業者用API #####################
+  /business-operator/qr/staff:
+    post:
+      tags:
+        - BUSINESS_OPERATOR
+      summary: スタッフ用QRコード生成
+      operationId: postBusinessOperatorQrStaff
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - staffIdList
+                - size
+              properties:
+                staffIdList:
+                  type: array
+                  items:
+                    type: number
+                size:
+                  type: number
+      responses:
+        '200':
+          description: 正常処理
+          content:
+            application/json:
+              schema:
+                required:
+                  - filePath
+                  - fileName
+                properties:
+                  filePath:
+                    type: string
+                    example: 'https://aws.png'
+                  fileName:
+                    type: string
+                    example: 'aws.png'
+  /business-operator/file:
+    delete:
+      tags:
+        - BUSINESS_OPERATOR
+      summary: ファイル削除
+      operationId: deleteBusinessOperatorFile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - filePath
+              properties:
+                filePath:
+                  type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/200_RESPONSE'
+  /business-operator/qr/business-operator:
+    post:
+      tags:
+        - BUSINESS_OPERATOR
+      summary: ショップ用QRコード生成
+      operationId: postBusinessOperatorQrBusinessOperator
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - isMulti
+                - isAbroad
+                - size
+              properties:
+                isMulti:
+                  type: boolean
+                isAbroad:
+                  type: boolean
+                size:
+                  type: number
+                firstDeskNumber:
+                  type: number
+                secondDeskNumber:
+                  type: number
+      responses:
+        '200':
+          description: 正常処理
+          content:
+            application/json:
+              schema:
+                required:
+                  - filePath
+                  - fileName
+                properties:
+                  filePath:
+                    type: string
+                    example: 'https://aws.png'
+                  fileName:
+                    type: string
+                    example: 'aws.png'
+  /business-operator/staff:
+    get:
+      tags:
+        - BUSINESS_OPERATOR
+      summary: スタッフ一覧取得
+      operationId: getBusinessOperatorStaff
+      responses:
+        '200':
+          $ref: '#/components/responses/200_RESPONSE_STAFF_LIST'
+  /business-operator/staff/{staffId}:
+    delete:
+      tags:
+        - BUSINESS_OPERATOR
+      summary: スタッフ論理削除処理
+      operationId: deleteBusinessOperatorStaffStaffId
+      parameters:
+        - $ref: '#/components/parameters/PATH_STAFF_ID'
+      responses:
+        '200':
+          $ref: '#/components/responses/200_RESPONSE'
+  /business-operator/staff/{staffId}/schedules:
+    get:
+      tags:
+        - BUSINESS_OPERATOR
+      summary: スタッフスケジュール取得
+      operationId: getBusinessOperatorStaffStaffIdSchedules
+      parameters:
+        - $ref: '#/components/parameters/PATH_STAFF_ID'
+      responses:
+        '200':
+          $ref: '#/components/responses/200_RESPONSE_STAFF_SCHEDULES'
+    post:
+      tags:
+        - BUSINESS_OPERATOR
+      summary: スタッフスケジュール取得
+      operationId: postBusinessOperatorStaffStaffIdSchedules
+      parameters:
+        - $ref: '#/components/parameters/PATH_STAFF_ID'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - schedules
+              properties:
+                schedules:
+                  $ref: '#/components/schemas/schedules'
+      responses:
+        '200':
+          $ref: '#/components/responses/200_RESPONSE_STAFF_SCHEDULES'
+  /business-operator/staff/{staffId}/profile/image:
+    post:
+      tags:
+        - BUSINESS_OPERATOR
+      summary: プロフィール画像登録
+      operationId: postBusinessOperatorStaffStaffIdProfileImage
+      parameters:
+        - $ref: '#/components/parameters/PATH_STAFF_ID'
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - image
+                - order
+              properties:
+                image:
+                  $ref: '#/components/schemas/modelFile'
+                order:
+                  $ref: '#/components/schemas/orderEnum'
+      responses:
+        '200':
+          $ref: '#/components/responses/200_RESPONSE_STAFF_PROFILE'
+    delete:
+      tags:
+        - BUSINESS_OPERATOR
+      summary: プロフィール画像削除
+      operationId: deleteBusinessOperatorStaffStaffIdProfileImage
+      parameters:
+        - $ref: '#/components/parameters/PATH_STAFF_ID'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - order
+              properties:
+                order:
+                  $ref: '#/components/schemas/orderEnum'
+      responses:
+        '200':
+          $ref: '#/components/responses/200_RESPONSE_STAFF_PROFILE'
+  /business-operator/staff/{staffId}/setting/message-notified:
+    post:
+      tags:
+        - BUSINESS_OPERATOR
+      summary: 各種設定
+      operationId: postBusinessOperatorStaffStaffIdSettingMessageNotified
+      parameters:
+        - $ref: '#/components/parameters/PATH_STAFF_ID'
+      requestBody:
+        $ref: '#/components/requestBodies/REQUEST_STAFF_SETTING_MESSAGE_NOTIFIED'
+      responses:
+        '200':
+          $ref: '#/components/responses/200_RESPONSE'
+  /business-operator/staff/admin/{adminStaffId}:
+    delete:
+      tags:
+        - BUSINESS_OPERATOR
+      summary: 管理者スタッフ論理削除処理
+      operationId: deleteBusinessOperatorStaffAdminAdminStaffId
+      parameters:
+        - $ref: '#/components/parameters/PATH_ADMIN_STAFF_ID'
+      responses:
+        '200':
+          $ref: '#/components/responses/200_RESPONSE'
+  /business-operator/transfer/payment-advice/pdf:
+    post:
+      tags:
+        - BUSINESS_OPERATOR
+      summary: 支払通知書PDF生成
+      operationId: postBusinessOperatorTransferPaymentAdvicePdf
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - requestId
+              properties:
+                requestId:
+                  type: number
+      responses:
+        '200':
+          description: 正常処理
+          content:
+            application/json:
+              schema:
+                required:
+                  - filePath
+                  - fileName
+                properties:
+                  filePath:
+                    type: string
+                    example: 'https://aws.pdf'
+                  fileName:
+                    type: string
+                    example: 'aws.pdf'
+  /business-operator/setting/publish:
+    put:
+      tags:
+        - BUSINESS_OPERATOR
+      summary: 公開設定更新
+      operationId: putBusinessOperatorSettingUpdatePublish
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - settingId
+                - isPublish
+              properties:
+                settingId:
+                  type: number
+                isPublish:
+                  type: boolean
+      responses:
+        '200':
+          description: 正常処理
+          content:
+            application/json:
+              schema:
+                required:
+                  - response
+                properties:
+                  response:
+                    type: boolean
+                    example: true
+  /business-operator/setting/review-publish:
+    put:
+      tags:
+        - BUSINESS_OPERATOR
+      summary: 口コミ公開設定更新
+      operationId: putBusinessOperatorSettingUpdateReviewPublish
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - settingId
+                - isReviewPublish
+              properties:
+                settingId:
+                  type: number
+                isReviewPublish:
+                  type: boolean
+      responses:
+        '200':
+          description: 正常処理
+          content:
+            application/json:
+              schema:
+                required:
+                  - response
+                properties:
+                  response:
+                    type: boolean
+                    example: true
+  /business-operator/setting/staff-ranking-publish:
+    put:
+      tags:
+        - BUSINESS_OPERATOR
+      summary: スタッフランキング公開設定更新
+      operationId: putBusinessOperatorSettingUpdateStaffRankingPublish
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - settingId
+                - isStaffRankingPublish
+              properties:
+                settingId:
+                  type: number
+                isStaffRankingPublish:
+                  type: boolean
+      responses:
+        '200':
+          description: 正常処理
+          content:
+            application/json:
+              schema:
+                required:
+                  - response
+                properties:
+                  response:
+                    type: boolean
+                    example: true
+  /business-operator/profile/image:
+    post:
+      tags:
+        - BUSINESS_OPERATOR
+      summary: プロフィール画像登録
+      operationId: postBusinessOperatorProfileImage
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - image
+                - order
+              properties:
+                image:
+                  $ref: '#/components/schemas/modelFile'
+                order:
+                  $ref: '#/components/schemas/orderEnum'
+      responses:
+        '200':
+          $ref: '#/components/responses/200_RESPONSE_STAFF_PROFILE'
+    delete:
+      tags:
+        - BUSINESS_OPERATOR
+      summary: プロフィール画像削除
+      operationId: deleteBusinessOperatorProfileImage
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - order
+              properties:
+                order:
+                  $ref: '#/components/schemas/orderEnum'
+      responses:
+        '200':
+          $ref: '#/components/responses/200_RESPONSE_STAFF_PROFILE'
+  ##################### 法人用API #####################
+  /corporation/transfer/payment-advice/pdf:
+    post:
+      tags:
+        - CORPORATION
+      summary: 支払通知書PDF生成
+      operationId: postCorporationTransferPaymentAdvicePdf
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - requestId
+              properties:
+                requestId:
+                  type: number
+      responses:
+        '200':
+          description: 正常処理
+          content:
+            application/json:
+              schema:
+                required:
+                  - filePath
+                  - fileName
+                properties:
+                  filePath:
+                    type: string
+                    example: 'https://aws.pdf'
+                  fileName:
+                    type: string
+                    example: 'aws.pdf'
+  /corporation/setting/publish:
+    put:
+      tags:
+        - CORPORATION
+      summary: 公開設定更新
+      operationId: putCorporationSettingUpdatePublish
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - settingId
+                - isPublish
+              properties:
+                settingId:
+                  type: number
+                isPublish:
+                  type: boolean
+      responses:
+        '200':
+          description: 正常処理
+          content:
+            application/json:
+              schema:
+                required:
+                  - response
+                properties:
+                  response:
+                    type: boolean
+                    example: true
+  ##################### スタッフ用API #####################
+  /staff/profile/image:
+    post:
+      tags:
+        - STAFF
+      summary: プロフィール画像登録
+      operationId: postProfileImage
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - image
+                - order
+              properties:
+                image:
+                  $ref: '#/components/schemas/modelFile'
+                order:
+                  $ref: '#/components/schemas/orderEnum'
+      responses:
+        '200':
+          $ref: '#/components/responses/200_RESPONSE_STAFF_PROFILE'
+    delete:
+      tags:
+        - STAFF
+      summary: プロフィール画像削除
+      operationId: deleteProfileImage
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - order
+              properties:
+                order:
+                  $ref: '#/components/schemas/orderEnum'
+      responses:
+        '200':
+          $ref: '#/components/responses/200_RESPONSE_STAFF_PROFILE'
+  /staff/setting/message-notified:
+    post:
+      tags:
+        - STAFF
+      summary: 各種設定
+      operationId: postSettingMessageNotified
+      requestBody:
+        $ref: '#/components/requestBodies/REQUEST_STAFF_SETTING_MESSAGE_NOTIFIED'
+      responses:
+        '200':
+          $ref: '#/components/responses/200_RESPONSE'
+    ##################### 投げ銭ユーザー用API #####################
+  /user/business-operator/{businessId}/review/{reviewId}:
+    delete:
+      tags:
+        - GUEST
+      summary: 口コミ削除処理
+      operationId: deleteReviewId
+      parameters:
+        - $ref: '#/components/parameters/PATH_BUSINESS_ID'
+        - $ref: '#/components/parameters/PATH_REVIEW_ID'
+      responses:
+        '200':
+          $ref: '#/components/responses/200_RESPONSE'
+  /user/staff/{staffId}/staff-favorite:
+    post:
+      tags:
+        - GUEST
+      summary: お気に入りスタッフ切り替え
+      operationId: toggleFavorite
+      parameters:
+        - name: staffId
+          in: path
+          required: true
+          description: スタッフID
+          schema:
+            type: integer
+        - name: favoriteId
+          in: query
+          required: false
+          schema:
+            type: integer
+            nullable: true
+      responses:
+        '200':
+          description: 正常処理
+          content:
+            application/json:
+              schema:
+                required:
+                  - favoriteId
+                properties:
+                  favoriteId:
+                    type: integer
+                    nullable: true
+  /user/staff/{staffId}/user-like:
+    post:
+      tags:
+        - GUEST
+      summary: いいね切り替え
+      operationId: toggleUserLike
+      parameters:
+        - name: staffId
+          in: path
+          required: true
+          description: スタッフID
+          schema:
+            type: integer
+        - name: userLikeId
+          in: query
+          required: false
+          schema:
+            type: integer
+            nullable: true
+      responses:
+        '200':
+          description: 正常処理
+          content:
+            application/json:
+              schema:
+                required:
+                  - userLikeId
+                properties:
+                  userLikeId:
+                    type: integer
+                    nullable: true
+components:
+  schemas:
+    ##################### 単体スキーマ #####################
+    modelFile:
+      description: 'ファイル(画像or動画)'
+      nullable: true
+      type: string
+      format: binary
+    fileURL:
+      type: string
+      nullable: true
+      example: https://aws.jpg
+      description: 画像URL or 動画URL
+    roleEnum:
+      type: string
+      enum:
+        - admin
+        - businessOperator
+        - staff
+        - user
+      example: admin
+      description: admin => 法人 / businessOperator => 事業者 / staff => スタッフ / user => 投げ銭ユーザー
+    orderEnum:
+      type: number
+      enum:
+        - 1
+        - 2
+        - 3
+      example: 1
+    transactionType:
+      type: number
+      enum:
+        - 1
+        - 2
+      example: 1
+      description: 1 => exchange / 2 => get
+    scheduleStatusEnum:
+      type: number
+      enum:
+        - 1
+        - 2
+        - 3
+      example: 1
+      description: 1 => notYet / 2 => holiday / 3 => work
+    businessOperatorName:
+      type: string
+      example: MITS 新宿店
+      description: 事業者名
+    staffName:
+      type: string
+      example: 田中太郎
+      description: スタッフ名
+    userName:
+      type: string
+      example: 投げ銭太郎
+      description: 投げ銭ユーザー名
+    userId:
+      type: number
+      example: 2
+      description: 投げ銭ユーザーID
+    staffId:
+      type: number
+      example: 2
+      description: スタッフID
+    staffRole:
+      type: string
+      example: 管理者スタッフ
+      description: 管理者スタッフ / 一般スタッフ
+    email:
+      type: string
+      example: test@example.com
+      description: メールアドレス
+    password:
+      type: string
+      example: Test123456789
+      description: パスワード
+    token:
+      type: string
+      example: ofdsjf987r3wrnesnfgf8
+      description: トークン
+    points:
+      type: number
+      example: 10000
+      description: 保有ポイント数
+    comment:
+      type: string
+      example: こんにちは
+      description: 一言コメント
+    message:
+      type: string
+      example: 本日はご来店ありがとうございます
+      description: お礼メッセージ
+    dateTime:
+      type: string
+      example: 2023/1/1
+      description: 時間
+    dayOfWeek:
+      type: string
+      example: 火
+      description: 曜日
+    tipId:
+      type: number
+      example: 2
+      description: 投げ銭ID
+    replyId:
+      type: number
+      example: 2
+      description: 投げ銭返信ID
+    isRead:
+      type: boolean
+      example: true
+      description: 既読
+    isResponse:
+      type: boolean
+      example: true
+      description: 返信
+    aiCount:
+      type: number
+      example: 2
+      description: AIメッセージ使用回数
+    notificationTypeEnum:
+      type: string
+      enum:
+        - public
+        - private
+        - pdf
+      example: public
+      description: public => お知らせ / private => 個人向けお知らせ / pdf => PDF
+    notificationItem:
+      description: お知らせ
+      type: object
+      required:
+        - title
+        - content
+        - startAt
+        - type
+      properties:
+        title:
+          type: string
+          example: ポイントの交換期限が迫っています
+          default: お知らせタイトル
+        content:
+          type: string
+          example: お知らせて詳細お知らせて詳細お知らせて詳細お知らせて詳細
+          default: お知らせて詳細
+        startAt:
+          $ref: '#/components/schemas/dateTime'
+        type:
+          $ref: '#/components/schemas/notificationTypeEnum'
+    notifications:
+      type: array
+      items:
+        $ref: '#/components/schemas/notificationItem'
+    userTip:
+      type: object
+      required:
+        - tipId
+        - userId
+        - staffId
+        - userName
+        - points
+        - message
+        - createdAt
+        - isRead
+        - isResponse
+      properties:
+        tipId:
+          $ref: '#/components/schemas/tipId'
+        userId:
+          $ref: '#/components/schemas/userId'
+        staffId:
+          $ref: '#/components/schemas/staffId'
+        image:
+          $ref: '#/components/schemas/fileURL'
+        userName:
+          $ref: '#/components/schemas/userName'
+        points:
+          $ref: '#/components/schemas/points'
+        message:
+          $ref: '#/components/schemas/message'
+        createdAt:
+          $ref: '#/components/schemas/dateTime'
+        isRead:
+          $ref: '#/components/schemas/isRead'
+        isResponse:
+          $ref: '#/components/schemas/isResponse'
+    staffTipReply:
+      type: object
+      required:
+        - replyId
+        - createdAt
+        - staffName
+        - message
+        - messageSrc
+      properties:
+        replyId:
+          $ref: '#/components/schemas/replyId'
+        image:
+          $ref: '#/components/schemas/fileURL'
+        staffName:
+          $ref: '#/components/schemas/staffName'
+        createdAt:
+          $ref: '#/components/schemas/dateTime'
+        message:
+          $ref: '#/components/schemas/message'
+        messageSrc:
+          $ref: '#/components/schemas/fileURL'
+        messageSrcType:
+          type: string
+          enum:
+            - image
+            - video
+          description: image => 画像 / video => 動画
+    profileImageItem:
+      description: プロフィール画像
+      type: object
+      required:
+        - image
+        - order
+      properties:
+        image:
+          nullable: true
+          type: string
+          example: https://aws.jpg
+        order:
+          $ref: '#/components/schemas/orderEnum'
+    profileImages:
+      description: プロフィール画像一覧
+      type: array
+      items:
+        $ref: '#/components/schemas/profileImageItem'
+    userLikeItem:
+      description: 投げ銭ユーザーいいね
+      type: object
+      required:
+        - userName
+      properties:
+        userName:
+          $ref: '#/components/schemas/userName'
+        image:
+          $ref: '#/components/schemas/fileURL'
+    userLikes:
+      description: 投げ銭ユーザーいいね履歴
+      type: array
+      items:
+        $ref: '#/components/schemas/userLikeItem'
+    pointHistoryItem:
+      type: object
+      required:
+        - transactionType
+        - pointChange
+        - createdAt
+      properties:
+        transactionType:
+          $ref: '#/components/schemas/transactionType'
+        pointChange:
+          type: number
+          example: 100
+          description: ポイント変動
+        createdAt:
+          $ref: '#/components/schemas/dateTime'
+    pointHistories:
+      type: array
+      items:
+        $ref: '#/components/schemas/pointHistoryItem'
+    scheduleItem:
+      type: object
+      required:
+        - date
+        - dayOfWeek
+        - status
+      properties:
+        date:
+          $ref: '#/components/schemas/dateTime'
+        dayOfWeek:
+          $ref: '#/components/schemas/dayOfWeek'
+        status:
+          $ref: '#/components/schemas/scheduleStatusEnum'
+    schedules:
+      type: array
+      items:
+        $ref: '#/components/schemas/scheduleItem'
+    staffListItem:
+      type: object
+      required:
+        - staffId
+        - staffName
+        - role
+      properties:
+        staffId:
+          $ref: '#/components/schemas/staffId'
+        staffName:
+          $ref: '#/components/schemas/staffName'
+        role:
+          $ref: '#/components/schemas/staffRole'
+        image:
+          $ref: '#/components/schemas/fileURL'
+    staffList:
+      type: array
+      items:
+        $ref: '#/components/schemas/staffListItem'
+    ##################### Inertia.js post系スキーマ #####################
+    response_notification:
+      type: object
+      properties:
+        type:
+          type: string
+          description: お知らせタイプ
+          example: pdf
+    response_staff_profile:
+      type: object
+      required:
+        - staffId
+        - images
+        - staffName
+      properties:
+        staffId:
+          $ref: '#/components/schemas/staffId'
+        images:
+          $ref: '#/components/schemas/profileImages'
+        staffName:
+          $ref: '#/components/schemas/staffName'
+        comment:
+          $ref: '#/components/schemas/comment'
+    response_staff_profile_setting:
+      type: object
+      required:
+        - staffId
+        - isMessageNotified
+      properties:
+        staffId:
+          $ref: '#/components/schemas/staffId'
+        isMessageNotified:
+          type: boolean
+          example: true
+          description: プッシュ通知 ON / OFF
+    response_staff_schedules:
+      type: object
+      required:
+        - startDate
+        - endDate
+        - schedules
+      properties:
+        startDate:
+          $ref: '#/components/schemas/dateTime'
+        endDate:
+          $ref: '#/components/schemas/dateTime'
+        schedules:
+          $ref: '#/components/schemas/schedules'
+    response_staff_myage:
+      type: object
+      required:
+        - businessOperatorName
+        - staffName
+      properties:
+        businessOperatorName:
+          $ref: '#/components/schemas/businessOperatorName'
+        staffName:
+          $ref: '#/components/schemas/staffName'
+        notifications:
+          $ref: '#/components/schemas/notifications'
+    response_tips:
+      description: 応援履歴一覧
+      type: object
+      required:
+        - userTips
+      properties:
+        userTips:
+          type: array
+          items:
+            $ref: '#/components/schemas/userTip'
+    response_likes:
+      type: object
+      required:
+        - likeCount
+        - likeList
+      properties:
+        likeCount:
+          type: number
+          example: 2
+          description: いいね数
+        likeList:
+          $ref: '#/components/schemas/userLikes'
+    response_point_histories:
+      type: object
+      required:
+        - points
+        - pointHistories
+      properties:
+        points:
+          type: number
+          example: 2
+          description: 保有ポイント数
+        pointHistories:
+          $ref: '#/components/schemas/pointHistories'
+    response_tip_show:
+      type: object
+      required:
+        - staffName
+        - aiCount
+        - userTip
+      properties:
+        staffName:
+          $ref: '#/components/schemas/staffName'
+        aiCount:
+          $ref: '#/components/schemas/aiCount'
+        userTip:
+          $ref: '#/components/schemas/userTip'
+        staffTipReply:
+          $ref: '#/components/schemas/staffTipReply'
+    post_login_inertia:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          $ref: '#/components/schemas/email'
+        password:
+          $ref: '#/components/schemas/password'
+    post_forgot_password_inertia:
+      type: object
+      required:
+        - token
+        - email
+        - password
+        - password_confirm
+      properties:
+        token:
+          $ref: '#/components/schemas/token'
+        email:
+          $ref: '#/components/schemas/email'
+        password:
+          $ref: '#/components/schemas/password'
+        password_confirm:
+          $ref: '#/components/schemas/password'
+    post_staff_profile_inertia:
+      type: object
+      required:
+        - staffName
+      properties:
+        staffName:
+          $ref: '#/components/schemas/staffName'
+        comment:
+          $ref: '#/components/schemas/comment'
+    post_staff_cheer_reply_inertia:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          $ref: '#/components/schemas/message'
+  parameters:
+    PATH_STAFF_ID:
+      name: staffId
+      in: path
+      description: スタッフID
+      required: true
+      schema:
+        type: number
+        example: 2
+    PATH_ADMIN_STAFF_ID:
+      name: adminStaffId
+      in: path
+      description: 管理者スタッフID
+      required: true
+      schema:
+        type: number
+        example: 2
+    PATH_PROMPT_ID:
+      name: promptId
+      in: path
+      description: CHATGPT prompt ID
+      required: true
+      schema:
+        type: number
+        example: 2
+    PATH_ZIP_CODE:
+      name: zipCode
+      in: path
+      description: 郵便番号
+      required: true
+      schema:
+        type: string
+        example: 1600023
+    PATH_REPLY_ID:
+      name: replyId
+      in: path
+      description: 投げ銭返信ID
+      required: true
+      schema:
+        type: number
+        example: 2
+    PATH_BUSINESS_ID:
+      name: businessId
+      in: path
+      required: true
+      schema:
+        type: number
+    PATH_REVIEW_ID:
+      name: reviewId
+      in: path
+      required: true
+      schema:
+        type: number
+    PATH_TIP_ID:
+      name: tipId
+      in: path
+      description: 投げ銭ID
+      required: true
+      schema:
+        type: number
+        example: 2
+  #################"#### API スキーマ #####################
+  requestBodies:
+    REQUEST_INERTIA_STAFF_PROFILE:
+      description: スタッフプロフィールリクエスト
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - staffName
+              - comment
+            properties:
+              staffName:
+                $ref: '#/components/schemas/staffName'
+              comment:
+                $ref: '#/components/schemas/comment'
+    REQUEST_INERTIA_CHEER_HISTORY_CREATE:
+      description: 応援履歴返信
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - message
+              - file
+            properties:
+              message:
+                $ref: '#/components/schemas/message'
+              file:
+                $ref: '#/components/schemas/modelFile'
+    REQUEST_CHATGPT:
+      description: ChatGPT
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - promptId
+            properties:
+              prompt:
+                type: number
+                example: 1
+                description: ChatGPTプロンプトID
+    REQUEST_USER_SETTING_IS_SHOW_RANKING:
+      description: ランキング表示設定
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - isShowRanking
+            properties:
+              isShowRanking:
+                type: boolean
+                example: true
+                description: ランキング表示判定フラグ
+    REQUEST_STAFF_SETTING_MESSAGE_NOTIFIED:
+      description: スタッフ各種設定
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - isMessageNotified
+            properties:
+              isMessageNotified:
+                type: boolean
+                example: true
+                description: プッシュコード判定フラグ
+  responses:
+    200_RESPONSE_INERTIA_STAFF_MYPAGE:
+      description: スタッフマイページ取得
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/response_staff_myage'
+    200_RESPONSE_INERTIA_STAFF_PROFILE:
+      description: スタッフプロフィール
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/response_staff_profile'
+    200_RESPONSE_INERTIA_STAFF_PROFILE_SETTING:
+      description: スタッフプロフィール
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/response_staff_profile_setting'
+    200_RESPONSE_INERTIA_STAFF_LIKES:
+      description: スタッフいいね履歴一覧
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/response_likes'
+    200_RESPONSE_INERTIA_STAFF_POINT_HISTORIES:
+      description: スタッフポイント履歴一覧
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/response_point_histories'
+    200_RESPONSE_INERTIA_STAFF_TIPS:
+      description: スタッフ応援履歴一覧
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/response_tips'
+    200_RESPONSE_INERTIA_STAFF_TIP_SHOW:
+      description: スタッフ応援履歴一覧
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/response_tip_show'
+    200_RESPONSE:
+      description: 正常処理
+      content:
+        application/json:
+          schema:
+            properties:
+              response:
+                type: boolean
+                example: true
+    200_RESPONSE_STAFF_LIST:
+      description: スタッフ一覧
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - staffList
+            properties:
+              staffList:
+                $ref: '#/components/schemas/staffList'
+    200_RESPONSE_STAFF_PROFILE:
+      description: ChatGPTレスポンス
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/response_staff_profile'
+    200_RESPONSE_STAFF_SCHEDULES:
+      description: スタッフスケジュールレスポンス
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/response_staff_schedules'
+    200_RESPONSE_ALL_CHATGPT_FOR_USER:
+      description: ChatGPTレスポンス
+      content:
+        application/json:
+          schema:
+            required:
+              - message
+            properties:
+              message:
+                type: string
+                example: ChatGPTレスポンス
+                description: ChatGPTレスポンス
+    200_RESPONSE_ALL_CHATGPT:
+      description: ChatGPTレスポンス
+      content:
+        application/json:
+          schema:
+            required:
+              - message
+              - aiCount
+            properties:
+              message:
+                type: string
+                example: ChatGPTレスポンス
+                description: ChatGPTレスポンス
+              aiCount:
+                $ref: '#/components/schemas/aiCount'
+    200_RESPONSE_ALL_ZIPCLOUD:
+      description: Zipcloudレスポンス
+      content:
+        application/json:
+          schema:
+            required:
+              - prefCode
+              - city
+            properties:
+              prefCode:
+                type: string
+                example: 1
+                description: 都道府県コード
+              city:
+                type: string
+                example: 新宿区西新宿
+                description: 市区町村
+
+    # 422_ERROR:
+    #   required:
+    #     - code
+    #     - message
+    #   properties:
+    #     code:
+    #       type: integer
+    #       format: int32
+    #     message:
+    #       type: string
+
+    # 200_RESPONSE_STAFF_SETTING:
+    #   description: test
+    #   content:
+    #     application/json:
+    #       schema:
+    #         type: object
+    #         required:
+    #           - isTest
+
+    # Pet:
+    #   required:
+    #     - id
+    #     - name
+    #   properties:
+    #     id:
+    #       type: integer
+    #       format: int64
+    #     name:
+    #       type: string
+    #     tag:
+    #       type: string
+    # Pets:
+    #   type: array
+    #   items:
+    #     $ref: '#/components/schemas/Pet'
+
+  # /pets:
+  #   get:
+  #     summary: List all pets
+  #     operationId: listPets
+  #     tags:
+  #       - pets
+  #     parameters:
+  #       - name: limit
+  #         in: query
+  #         description: How many items to return at one time (max 100)
+  #         required: false
+  #         schema:
+  #           type: integer
+  #           format: int32
+  #     responses:
+  #       '200':
+  #         description: A paged array of pets
+  #         headers:
+  #           x-next:
+  #             description: A link to the next page of responses
+  #             schema:
+  #               type: string
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/Pets'
+  #       default:
+  #         description: unexpected error
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/Error'
